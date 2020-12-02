@@ -23,13 +23,15 @@ $app->group('/v1', function () use ($app) {
         $accessToken = $app->request->getToken();
         $user_id = $accessToken->getUserId();
         try {
-        $crs_model = new CoursesModel();
-        $data1 =  $crs_model->getAllCourses($user_id);
+            $crs_model = new CoursesModel();
+            $data1 =  $crs_model->getAllCourses($user_id);
 
-        $result = array(
-            'courses' => $data1
-        );
-        $app->success($result);
+            $result = array(
+                'courses' => $data1
+            );
+            $app->success($result);
+        } catch(\Slim\Exception\Stop $slimEx) {
+            // Ignore stop exceptions, will be thrown in $app->success also.
         } catch (\Exception $e) {
             $app->halt(500, $e->getMessage());
         }
@@ -53,6 +55,8 @@ $app->group('/v1', function () use ($app) {
                 'members' => $data3   // course members
             );
             $app->success($result);
+        } catch(\Slim\Exception\Stop $slimEx) {
+            // Ignore stop exceptions, will be thrown in $app->success also.
         } catch (\Exception $e) {
             $app->halt(500, $e->getMessage());
         }
